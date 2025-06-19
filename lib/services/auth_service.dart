@@ -9,7 +9,7 @@ class AuthService {
 
   bool isLoggedIn() => currentUser != null;
 
-  Future<String?> signup(String name, String email, String password) async {
+  Future<String?> signup(String name,  String Lname ,String email, String password) async {
     try {
        final cred = await fbAuth.createUserWithEmailAndPassword(
         email: email, 
@@ -18,6 +18,7 @@ class AuthService {
       
        await firestore.collection('users').doc(email).set({
         'name': name,
+         'lname':Lname,
         'email': email,
         'password': password,
         'uid': cred.user!.uid,

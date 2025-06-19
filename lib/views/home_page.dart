@@ -3,21 +3,21 @@ import 'package:get/get.dart';
 import '../viewmodels/auth_view_model.dart';
 
 class HomePage extends StatelessWidget {
-  final vm = Get.find<AuthViewModel>();
+  final info = Get.find<AuthViewModel>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        title: const Text('Dashboard'),
-        backgroundColor: Colors.blueAccent,
+        title: const Text('HomePage'),
+        backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         elevation: 4,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: vm.logout,
+            onPressed: info.logout,
             tooltip: 'Logout',
           )
         ],
@@ -41,36 +41,41 @@ class HomePage extends StatelessWidget {
 
   Widget _buildWelcomeCard() {
     return Card(
-      elevation: 6,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 8,
+      shadowColor: Colors.indigo.withOpacity(0.2),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      color: Colors.indigo[100],
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            const CircleAvatar(
+            CircleAvatar(
               radius: 30,
-              backgroundColor: Colors.blueAccent,
-              child: Icon(Icons.person, size: 30, color: Colors.white),
+              backgroundColor: Colors.indigo,
+              child: const Icon(Icons.person, size: 30, color: Colors.white),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Welcome back!',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.indigo),
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    vm.userData['name'] ?? vm.userEmail ?? "Loading...",
-                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                    '${info.userData['name'] ?? ""} ${info.userData['lname'] ?? ""}',
+                    style: TextStyle(fontSize: 18, color: Colors.black87),
                   ),
-                  if (vm.userData['name'] != null) ...[
+                  if (info.userData['email'] != null) ...[
                     const SizedBox(height: 4),
                     Text(
-                      vm.userEmail ?? "",
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      info.userEmail ?? "",
+                      style: TextStyle(fontSize: 14, color: Colors.grey[800]),
                     ),
                   ],
                 ],
@@ -83,22 +88,27 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildInfoCard() {
-    final userData = vm.userData;
+    final userData = info.userData;
     return Card(
       elevation: 6,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Account Details',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              '👤 Account Details',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.indigo[900]),
             ),
-            const Divider(),
+            const Divider(thickness: 1),
             const SizedBox(height: 10),
-            _buildInfoRow('Name', userData['name'] ?? "N/A"),
+            _buildInfoRow('Name',
+                '${userData['name'] ?? "N/A"} ${userData['lname'] ?? ""}'),
             _buildInfoRow('Email', userData['email'] ?? "N/A"),
             _buildInfoRow('User ID', userData['uid'] ?? "N/A"),
             _buildInfoRow('Created At', _formatDate(userData['createdAt'])),
@@ -111,14 +121,22 @@ class HomePage extends StatelessWidget {
 
   Widget _buildInfoRow(String title, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Icon(Icons.check_circle_outline, color: Colors.green, size: 20),
+          const Icon(Icons.check_circle, color: Colors.green, size: 20),
           const SizedBox(width: 8),
-          Expanded(child: Text('$title: ', style: TextStyle(fontWeight: FontWeight.w600))),
+          Text(
+            '$title:',
+            style: const TextStyle(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(width: 10),
           Expanded(
-            child: Text(value, style: TextStyle(color: Colors.grey[800])),
+            child: Text(
+              value,
+              style: TextStyle(color: Colors.grey[800]),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ],
       ),
@@ -127,19 +145,19 @@ class HomePage extends StatelessWidget {
 
   Widget _buildFirestoreHintCard() {
     return Card(
-      color: Colors.deepPurple[50],
+      color: Colors.green[50],
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            const Icon(Icons.info_outline, color: Colors.deepPurple),
+            const Icon(Icons.cloud_done, color: Colors.green),
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                'Your data is stored in the "users" collection in Firebase Firestore, identified by your email address.',
-                style: TextStyle(fontSize: 14, color: Colors.deepPurple[900]),
+                '✅ Data is successfully stored in the Firebase "User" collection.',
+                style: TextStyle(fontSize: 14, color: Colors.green[900]),
               ),
             ),
           ],

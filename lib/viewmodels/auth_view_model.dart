@@ -26,9 +26,9 @@ class AuthViewModel extends GetxController {
     }
   }
 
-  Future<void> signup(String name, String email, String pass) async {
+  Future<void> signup(String name, String Lname ,String email, String pass ) async {
     isLoading.value = true;
-    final err = await _auth.signup(name, email, pass);
+    final err = await _auth.signup(name, Lname,email, pass);
     isLoading.value = false;
     if (err == null) {
       await loadUserData();
