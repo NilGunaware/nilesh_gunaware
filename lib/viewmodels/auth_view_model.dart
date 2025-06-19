@@ -29,4 +29,8 @@ class AuthViewModel extends GetxController {
     _authService.register(email, password);
     Get.offAllNamed('/home');
   }
+
+  String? getLoggedInEmail() {
+    return _authService.loggedInEmail;
+  }
 }

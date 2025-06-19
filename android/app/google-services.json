@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "651486664017",
+    "project_id": "niladddata",
+    "storage_bucket": "niladddata.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651486664017:android:c1082bc88f512d9eb1ef70",
+        "android_client_info": {
+          "package_name": "com.example.nilesh_gunaware"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz3xJU_9nzs0Kb8q_pHDEtfvS8nstrEbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651486664017:android:1937518927aab070b1ef70",
+        "android_client_info": {
+          "package_name": "com.example.second"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz3xJU_9nzs0Kb8q_pHDEtfvS8nstrEbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
