@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../viewmodels/auth_view_model.dart';
 
 class SignupPage extends StatelessWidget {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -36,6 +37,26 @@ class SignupPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          labelText: "Full Name",
+                          prefixIcon: Icon(Icons.person),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter your name";
+                          }
+                          if (value.trim().length < 2) {
+                            return "Name must be at least 2 characters";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 16),
                       TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
@@ -89,6 +110,7 @@ class SignupPage extends StatelessWidget {
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               _authViewModel.signup(
+                                _nameController.text.trim(),
                                 _emailController.text.trim(),
                                 _passwordController.text.trim(),
                               );

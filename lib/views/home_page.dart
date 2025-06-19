@@ -63,9 +63,16 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    vm.userEmail ?? "Loading...",
+                    vm.userData['name'] ?? vm.userEmail ?? "Loading...",
                     style: TextStyle(fontSize: 16, color: Colors.grey[700]),
                   ),
+                  if (vm.userData['name'] != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      vm.userEmail ?? "",
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -91,6 +98,8 @@ class HomePage extends StatelessWidget {
             ),
             const Divider(),
             const SizedBox(height: 10),
+            _buildInfoRow('Name', userData['name'] ?? "N/A"),
+            _buildInfoRow('Email', userData['email'] ?? "N/A"),
             _buildInfoRow('User ID', userData['uid'] ?? "N/A"),
             _buildInfoRow('Created At', _formatDate(userData['createdAt'])),
             _buildInfoRow('Last Login', _formatDate(userData['lastLogin'])),

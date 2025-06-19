@@ -9,18 +9,17 @@ class AuthService {
 
   bool isLoggedIn() => currentUser != null;
 
-  Future<String?> signup(String email, String password) async {
+  Future<String?> signup(String name, String email, String password) async {
     try {
-      // Create user with Firebase Auth
-      final cred = await fbAuth.createUserWithEmailAndPassword(
+       final cred = await fbAuth.createUserWithEmailAndPassword(
         email: email, 
         password: password
       );
       
-      // Store user data in Firestore with email as document ID
-      await firestore.collection('users').doc(email).set({
+       await firestore.collection('users').doc(email).set({
+        'name': name,
         'email': email,
-        'password': password, // Note: In production, never store passwords in plain text
+        'password': password,
         'uid': cred.user!.uid,
         'createdAt': DateTime.now().toIso8601String(),
         'lastLogin': DateTime.now().toIso8601String(),
@@ -36,14 +35,12 @@ class AuthService {
 
   Future<String?> login(String email, String password) async {
     try {
-      // Sign in with Firebase Auth
-      await fbAuth.signInWithEmailAndPassword(
+       await fbAuth.signInWithEmailAndPassword(
         email: email, 
         password: password
       );
       
-      // Update last login time in Firestore
-      await firestore.collection('users').doc(email).update({
+       await firestore.collection('users').doc(email).update({
         'lastLogin': DateTime.now().toIso8601String(),
       });
       
@@ -59,8 +56,7 @@ class AuthService {
     await fbAuth.signOut();
   }
 
-  // Get user data from Firestore
-  Future<Map<String, dynamic>?> getUserData(String email) async {
+   Future<Map<String, dynamic>?> getUserData(String email) async {
     try {
       final doc = await firestore.collection('users').doc(email).get();
       if (doc.exists) {

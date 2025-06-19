@@ -12,8 +12,7 @@ class AuthViewModel extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // Load user data if logged in
-    if (isLoggedIn()) {
+     if (isLoggedIn()) {
       loadUserData();
     }
   }
@@ -27,12 +26,12 @@ class AuthViewModel extends GetxController {
     }
   }
 
-  Future<void> signup(String email, String pass) async {
+  Future<void> signup(String name, String email, String pass) async {
     isLoading.value = true;
-    final err = await _auth.signup(email, pass);
+    final err = await _auth.signup(name, email, pass);
     isLoading.value = false;
     if (err == null) {
-      await loadUserData(); // Load user data after successful signup
+      await loadUserData();
       Get.offAllNamed('/home');
     } else {
       Get.snackbar("Signup Error", err);
@@ -44,7 +43,7 @@ class AuthViewModel extends GetxController {
     final err = await _auth.login(email, pass);
     isLoading.value = false;
     if (err == null) {
-      await loadUserData(); // Load user data after successful login
+      await loadUserData();
       Get.offAllNamed('/home');
     } else {
       Get.snackbar("Login Error", err);
@@ -53,7 +52,7 @@ class AuthViewModel extends GetxController {
 
   void logout() {
     _auth.logout();
-    userData.clear(); // Clear user data on logout
+    userData.clear();
     Get.offAllNamed('/login');
   }
 }
