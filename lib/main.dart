@@ -8,8 +8,7 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Firebase with proper error handling
-  try {
+   try {
     if (Firebase.apps.isEmpty) {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
@@ -17,11 +16,9 @@ void main() async {
     }
   } catch (e) {
     print('Firebase initialization error: $e');
-    // Continue with app initialization even if Firebase fails
-  }
+   }
 
-  // Initialize your AuthViewModel
-  Get.put(AuthViewModel());
+   Get.put(AuthViewModel());
 
   runApp(MyApp());
 }
