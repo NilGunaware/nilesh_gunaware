@@ -29,10 +29,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final authViewModel = Get.find<AuthViewModel>();
+    
     return GetMaterialApp(
       title: 'Firebase Auth MVVM',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
+      initialRoute: authViewModel.isLoggedIn() ? '/home' : '/login',
       getPages: AppRoutes.routes,
     );
   }
