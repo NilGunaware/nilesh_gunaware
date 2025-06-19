@@ -2,35 +2,36 @@ import 'package:get/get.dart';
 import '../services/auth_service.dart';
 
 class AuthViewModel extends GetxController {
-  final AuthService _authService = AuthService();
-
+  final _auth = AuthService();
   var isLoading = false.obs;
 
-  bool isLoggedIn() => _authService.isLoggedIn();
+  bool isLoggedIn() => _auth.isLoggedIn();
+  String? get userEmail => _auth.currentUser?.email;
 
-  Future<void> login(String email, String password) async {
+  Future<void> signup(String email, String pass) async {
     isLoading.value = true;
-    final result = await _authService.login(email, password);
+    final err = await _auth.signup(email, pass);
     isLoading.value = false;
-
-    if (result == "success") {
+    if (err == null) {
       Get.offAllNamed('/home');
     } else {
-      Get.snackbar("Error", result);
+      Get.snackbar("Signup Error", err);
+    }
+  }
+
+  Future<void> login(String email, String pass) async {
+    isLoading.value = true;
+    final err = await _auth.login(email, pass);
+    isLoading.value = false;
+    if (err == null) {
+      Get.offAllNamed('/home');
+    } else {
+      Get.snackbar("Login Error", err);
     }
   }
 
   void logout() {
-    _authService.logout();
+    _auth.logout();
     Get.offAllNamed('/login');
-  }
-
-  void signup(String email, String password) {
-    _authService.register(email, password);
-    Get.offAllNamed('/home');
-  }
-
-  String? getLoggedInEmail() {
-    return _authService.loggedInEmail;
   }
 }

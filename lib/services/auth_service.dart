@@ -1,36 +1,50 @@
-import '../models/user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class AuthService {
-  final List<UserModel> _users = [
-    UserModel(email: "test@test.com", password: "123456"),
-  ];
+  final fbAuth = FirebaseAuth.instance;
+  final dbRef = FirebaseDatabase.instance.ref('users');
 
-  String? _loggedInEmail;
+  User? get currentUser => fbAuth.currentUser;
 
-  bool isLoggedIn() => _loggedInEmail != null;
+  bool isLoggedIn() => currentUser != null;
 
-  Future<String> login(String email, String password) async {
-    await Future.delayed(Duration(seconds: 1));
-    final user = _users.firstWhere(
-          (u) => u.email == email,
-      orElse: () => UserModel(email: '', password: ''),
-    );
-
-    if (user.email.isEmpty) return "Email not found";
-    if (user.password != password) return "Incorrect password";
-
-    _loggedInEmail = user.email;
-    return "success";
+  Future<String?> signup(String email, String password) async {
+    try {
+      final cred = await fbAuth.createUserWithEmailAndPassword(
+        email: email, 
+        password: password
+      );
+      
+      // Store user data in Firebase Database
+      await dbRef.child(cred.user!.uid).set({
+        'email': email,
+        'createdAt': DateTime.now().toIso8601String(),
+      });
+      
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    } catch (e) {
+      return "Signup failed: ${e.toString()}";
+    }
   }
 
-  void logout() {
-    _loggedInEmail = null;
+  Future<String?> login(String email, String password) async {
+    try {
+      await fbAuth.signInWithEmailAndPassword(
+        email: email, 
+        password: password
+      );
+      return null;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    } catch (e) {
+      return "Login failed: ${e.toString()}";
+    }
   }
 
-  void register(String email, String password) {
-    _users.add(UserModel(email: email, password: password));
-    _loggedInEmail = email;
+  Future<void> logout() async {
+    await fbAuth.signOut();
   }
-
-  String? get loggedInEmail => _loggedInEmail;
 }
