@@ -52,6 +52,8 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 24),
+
+                      // mail
                       TextFormField(
                         controller: _emailController,
                         decoration: InputDecoration(
@@ -95,14 +97,31 @@ class LoginPage extends StatelessWidget {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 24),
-                      SizedBox(
+
+                       Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () => Get.toNamed('/forgot-password'),
+                          child: const Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                              color: Colors.indigo,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.indigo,
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -115,7 +134,8 @@ class LoginPage extends StatelessWidget {
                               );
                             }
                           },
-                          child: const Text("Login", style: TextStyle(fontSize: 16)),
+                          child: const Text("Login",
+                              style: TextStyle(fontSize: 16)),
                         ),
                       ),
                       const SizedBox(height: 12),

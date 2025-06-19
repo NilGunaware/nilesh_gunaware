@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
-        title: const Text('HomePage'),
+        title: const Text('Home Page'),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
         elevation: 4,
@@ -107,8 +107,7 @@ class HomePage extends StatelessWidget {
             ),
             const Divider(thickness: 1),
             const SizedBox(height: 10),
-            _buildInfoRow('Name',
-                '${userData['name'] ?? "N/A"} ${userData['lname'] ?? ""}'),
+            _buildInfoRow('Name', '${userData['name'] ?? "N/A"} ${userData['lname'] ?? ""}'),
             _buildInfoRow('Email', userData['email'] ?? "N/A"),
             _buildInfoRow('User ID', userData['uid'] ?? "N/A"),
             _buildInfoRow('Created At', _formatDate(userData['createdAt'])),
@@ -156,7 +155,7 @@ class HomePage extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                '✅ Data is successfully stored in the Firebase "User" collection.',
+                '✅ Data is successfully stored in the Firebase "users" collection.',
                 style: TextStyle(fontSize: 14, color: Colors.green[900]),
               ),
             ),
