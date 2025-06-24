@@ -42,4 +42,12 @@ class HomeViewModel extends GetxController {
   int getCartQuantity(String productId) {
     return cart[productId] ?? 0;
   }
-} 
+
+  void incrementQuantity(String productId) {
+    addToCart(productId);
+  }
+
+  void decrementQuantity(String productId) {
+    removeFromCart(productId);
+  }
+}

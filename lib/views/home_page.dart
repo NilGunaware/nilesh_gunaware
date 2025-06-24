@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../viewmodels/home_view_model.dart';
 import '../models/product_model.dart';
 import '../models/category_model.dart';
+import '../views/product_details_page.dart';
 
 const kGold = Color(0xFFC9A063);
 const kBrown = Color(0xFF5C4631);
@@ -304,100 +305,103 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildProductCard(ProductModel product) {
-    return Card(
-      elevation: 1.5,
-      shadowColor: kGold.withOpacity(0.10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    product.imageUrl,
-                    height: 150,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  left: 2,
-                  top: 2,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        bottomRight: Radius.circular(12),
-                      ),
-                    ),
-                    child: const Text('100% cotton', style: TextStyle(fontSize: 10, color: Colors.green, fontWeight: FontWeight.bold)),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Text(
-                  product.name,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: kBrown),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Spacer(),
-                Icon(Icons.lock,size: 17,color: kBrown,)
-              ],
-            ),
-            const SizedBox(height: 4),
-
-            Text(
-              'Avalable Qty :${controller.getCartQuantity(product.id)}',
-              style: TextStyle(fontSize: 11,
-                fontWeight: FontWeight.w300, color: kBrown,),
-            ),
-
-            const SizedBox(height: 4),
-            Text('₹ ${product.price.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, color: kBrown, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 4),
-            Obx(() {
-              final int qty = controller.getCartQuantity(product.id);
-              return Row(
+    return GestureDetector(
+      onTap: () => Get.to(() => ProductDetailsPage(product: product)),
+      child: Card(
+        elevation: 1.5,
+        shadowColor: kGold.withOpacity(0.10),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
                 children: [
-                  if (qty == 0)
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: kGold,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          elevation: 0,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      product.imageUrl,
+                      height: 150,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    left: 2,
+                    top: 2,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
                         ),
-                        onPressed: () => controller.addToCart(product.id),
-                        child: const Text('Add to cart', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                       ),
-                    )
-                  else ...[
-                    IconButton(
-                      icon: const Icon(Icons.remove_circle_outline, size: 20, color: kGold),
-                      onPressed: () => controller.removeFromCart(product.id),
+                      child: const Text('100% cotton', style: TextStyle(fontSize: 10, color: Colors.green, fontWeight: FontWeight.bold)),
                     ),
-                    Text('$qty', style: const TextStyle(fontWeight: FontWeight.bold, color: kBrown)),
-                    IconButton(
-                      icon: const Icon(Icons.add_circle_outline, size: 20, color: kGold),
-                      onPressed: () => controller.addToCart(product.id),
-                    ),
-                  ],
+                  ),
                 ],
-              );
-            }),
-          ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    product.name,
+                    style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: kBrown),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Spacer(),
+                  Icon(Icons.lock,size: 17,color: kBrown,)
+                ],
+              ),
+              const SizedBox(height: 4),
+
+              Text(
+                'Avalable Qty :${controller.getCartQuantity(product.id)}',
+                style: TextStyle(fontSize: 11,
+                  fontWeight: FontWeight.w300, color: kBrown,),
+              ),
+
+              const SizedBox(height: 4),
+              Text('₹ ${product.price.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, color: kBrown, fontWeight: FontWeight.w600)),
+              const SizedBox(height: 4),
+              Obx(() {
+                final int qty = controller.getCartQuantity(product.id);
+                return Row(
+                  children: [
+                    if (qty == 0)
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: kGold,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            elevation: 0,
+                          ),
+                          onPressed: () => controller.addToCart(product.id),
+                          child: const Text('Add to cart', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                        ),
+                      )
+                    else ...[
+                      IconButton(
+                        icon: const Icon(Icons.remove_circle_outline, size: 20, color: kGold),
+                        onPressed: () => controller.removeFromCart(product.id),
+                      ),
+                      Text('$qty', style: const TextStyle(fontWeight: FontWeight.bold, color: kBrown)),
+                      IconButton(
+                        icon: const Icon(Icons.add_circle_outline, size: 20, color: kGold),
+                        onPressed: () => controller.addToCart(product.id),
+                      ),
+                    ],
+                  ],
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
