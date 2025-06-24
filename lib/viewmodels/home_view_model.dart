@@ -12,6 +12,9 @@ class HomeViewModel extends GetxController {
   var selectedCategory = ''.obs;
   var sortOrder = 'Default'.obs; // e.g., 'Default', 'Price: Low to High', etc.
 
+  // Switch for app bar
+  var isSwitched = false.obs;
+
   // Computed filtered products
   List<ProductModel> get filteredProducts {
     var list = products.toList();

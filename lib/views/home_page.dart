@@ -90,10 +90,11 @@ class HomePage extends StatelessWidget {
             ],
           );
         }),
-        IconButton(
-          icon: const Icon(Icons.person_outline, color: kBrown, size: 22),
-          onPressed: () {},
-        ),
+        Obx(() => Switch(
+          value: controller.isSwitched.value,
+          onChanged: (val) => controller.isSwitched.value = val,
+          activeColor: kGold,
+        )),
       ],
     );
   }
