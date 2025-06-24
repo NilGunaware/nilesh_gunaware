@@ -7,6 +7,31 @@ class HomeViewModel extends GetxController {
   var products = <ProductModel>[].obs;
   var cart = <String, int>{}.obs; // productId -> quantity
 
+  // Search, filter, and sort
+  var searchQuery = ''.obs;
+  var selectedCategory = ''.obs;
+  var sortOrder = 'Default'.obs; // e.g., 'Default', 'Price: Low to High', etc.
+
+  // Computed filtered products
+  List<ProductModel> get filteredProducts {
+    var list = products.toList();
+    // Filter by search
+    if (searchQuery.isNotEmpty) {
+      list = list.where((p) => p.name.toLowerCase().contains(searchQuery.value.toLowerCase())).toList();
+    }
+    // Filter by category
+    if (selectedCategory.isNotEmpty) {
+      list = list.where((p) => p.name.toLowerCase().contains(selectedCategory.value.toLowerCase())).toList();
+    }
+    // Sort
+    if (sortOrder.value == 'Price: Low to High') {
+      list.sort((a, b) => a.price.compareTo(b.price));
+    } else if (sortOrder.value == 'Price: High to Low') {
+      list.sort((a, b) => b.price.compareTo(a.price));
+    }
+    return list;
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -26,6 +51,18 @@ class HomeViewModel extends GetxController {
       ProductModel(id: '003', name: 'IDSH - 0014', imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca', price: 370),
       ProductModel(id: '004', name: 'IDSH - 0015', imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca', price: 390),
     ];
+  }
+
+  void setSearchQuery(String query) {
+    searchQuery.value = query;
+  }
+
+  void setCategory(String category) {
+    selectedCategory.value = category;
+  }
+
+  void setSortOrder(String order) {
+    sortOrder.value = order;
   }
 
   void addToCart(String productId) {

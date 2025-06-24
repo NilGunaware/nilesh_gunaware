@@ -4,6 +4,7 @@ import '../viewmodels/home_view_model.dart';
 import '../models/product_model.dart';
 import '../models/category_model.dart';
 import '../views/product_details_page.dart';
+import 'cart_page.dart';
 
 const kGold = Color(0xFFC9A063);
 const kBrown = Color(0xFF5C4631);
@@ -11,11 +12,18 @@ const kBrown = Color(0xFF5C4631);
 class HomePage extends StatelessWidget {
   final HomeViewModel controller = Get.put(HomeViewModel());
 
+  final List<String> sortOptions = [
+    'Default',
+    'Price: Low to High',
+    'Price: High to Low',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
+      drawer: _buildDrawer(),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,9 +46,11 @@ class HomePage extends StatelessWidget {
     return AppBar(
       backgroundColor: Colors.white,
       elevation: 0.5,
-      leading: IconButton(
-        icon: const Icon(Icons.menu, color: kBrown, size: 22),
-        onPressed: () {},
+      leading: Builder(
+        builder: (context) => IconButton(
+          icon: const Icon(Icons.menu, color: kBrown, size: 22),
+          onPressed: () => Scaffold.of(context).openDrawer(),
+        ),
       ),
       title: const Text(
         'ZUNYA',
@@ -53,10 +63,33 @@ class HomePage extends StatelessWidget {
       ),
       centerTitle: true,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.shopping_cart_outlined, color: kBrown, size: 22),
-          onPressed: () {},
-        ),
+        Obx(() {
+          int cartCount = controller.cart.values.fold(0, (a, b) => a + b);
+          return Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart_outlined, color: kBrown, size: 22),
+                onPressed: () => Get.to(() => CartPage()),
+              ),
+              if (cartCount > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '$cartCount',
+                      style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        }),
         IconButton(
           icon: const Icon(Icons.person_outline, color: kBrown, size: 22),
           onPressed: () {},
@@ -65,12 +98,52 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  Widget _buildDrawer() {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(color: kGold),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                CircleAvatar(radius: 28, backgroundColor: Colors.white, child: Icon(Icons.person, size: 32, color: kGold)),
+                SizedBox(height: 12),
+                Text('Welcome!', style: TextStyle(color: kBrown, fontWeight: FontWeight.bold, fontSize: 18)),
+                Text('ZUNYA User', style: TextStyle(color: kBrown)),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home, color: kBrown),
+            title: const Text('Home'),
+            onTap: () => Get.back(),
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_cart, color: kBrown),
+            title: const Text('Cart'),
+            onTap: () {
+              Get.back();
+              Get.to(() => CartPage());
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout, color: kBrown),
+            title: const Text('Logout'),
+            onTap: () {},
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildHeroBanner() {
     return Stack(
       children: [
         Container(
           width: double.infinity,
-          height: 150,
+          height: 300,
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
@@ -92,7 +165,7 @@ class HomePage extends StatelessWidget {
         Positioned(
           left: 0,
           right: 0,
-          top: 60,
+           bottom: 30,
           child: Column(
             children: [
               const Text(
@@ -140,6 +213,7 @@ class HomePage extends StatelessWidget {
                 border: Border.all(color: Colors.grey[300]!, width: 1),
               ),
               child: TextField(
+                onChanged: controller.setSearchQuery,
                 decoration: InputDecoration(
                   hintText: 'Search Or Scan your QR here',
                   hintStyle: TextStyle(color: Colors.grey[500], fontSize: 13),
@@ -158,13 +232,63 @@ class HomePage extends StatelessWidget {
             ),
             child: IconButton(
               icon: const Icon(Icons.tune, color: Colors.white, size: 20),
-              onPressed: () {},
+              onPressed: () {
+                // Optionally open a filter modal
+                _showFilterBottomSheet(Get.context!);
+              },
             ),
           ),
         ],
       ),
     );
   }
+
+  void _showFilterBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Sort By', style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              ...sortOptions.map((option) => Obx(() => RadioListTile<String>(
+                    title: Text(option),
+                    value: option,
+                    groupValue: controller.sortOrder.value,
+                    onChanged: (val) => controller.setSortOrder(val!),
+                  ))),
+              const Divider(),
+              const Text('Category', style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                children: [
+                  ChoiceChip(
+                    label: const Text('All'),
+                    selected: controller.selectedCategory.value.isEmpty,
+                    onSelected: (_) => controller.setCategory(''),
+                  ),
+                  ...controller.categories.map((cat) => Obx(() => ChoiceChip(
+                        label: Text(cat.name),
+                        selected: controller.selectedCategory.value == cat.name,
+                        onSelected: (_) => controller.setCategory(cat.name),
+                      ))),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget _sectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -248,39 +372,48 @@ class HomePage extends StatelessWidget {
         ),
       ],
     );
+
   }
 
   Widget _buildNewArrivalsHeader() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-           _buildFilterDropdown('FILTER'),
-           _buildFilterDropdown('CATEGORY'),
-           _buildFilterDropdown('SORT'),
+          Expanded(child: _buildFilterDropdown('CATEGORY')),
+          SizedBox(width: 8),
+          Expanded(child: _buildFilterDropdown('SORT')),
         ],
       ),
     );
   }
 
   Widget _buildFilterDropdown(String label) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-         borderRadius: BorderRadius.circular(8),
-        color: Colors.white,
-      ),
-      child: Row(
-        children: [
-          Text(label, style: const TextStyle(
-            decoration: TextDecoration.underline ,
-            decorationColor: kBrown,
-            fontSize: 12, color: kBrown, fontWeight: FontWeight.w600,)),
-          const Icon(Icons.keyboard_arrow_down, size: 16, color: kBrown),
-        ],
-      ),
-    );
+    return Obx(() => DropdownButtonHideUnderline(
+          child: DropdownButton<String>(
+            isExpanded: true,
+            value: label == 'SORT'
+                ? controller.sortOrder.value
+                : label == 'CATEGORY'
+                    ? (controller.selectedCategory.value.isEmpty ? 'All' : controller.selectedCategory.value)
+                    : null,
+            hint: Text(label, style: const TextStyle(fontSize: 12, color: kBrown, fontWeight: FontWeight.w600)),
+            items: label == 'SORT'
+                ? sortOptions.map((option) => DropdownMenuItem(value: option, child: Text(option, overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 12)))).toList()
+                : label == 'CATEGORY'
+                    ? [
+                        const DropdownMenuItem(value: 'All', child: Text('All', overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 12))),
+                        ...controller.categories.map((cat) => DropdownMenuItem(value: cat.name, child: Text(cat.name, overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 12)))).toList(),
+                      ]
+                    : null,
+            onChanged: (val) {
+              if (label == 'SORT' && val != null) controller.setSortOrder(val);
+              if (label == 'CATEGORY' && val != null) controller.setCategory(val == 'All' ? '' : val);
+            },
+            icon: const Icon(Icons.keyboard_arrow_down, size: 16, color: kBrown),
+            style: const TextStyle(fontSize: 12, color: kBrown, fontWeight: FontWeight.w600),
+          ),
+        ));
   }
 
   Widget _buildProductGrid() {
@@ -293,11 +426,11 @@ class HomePage extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: 16,
               crossAxisSpacing: 12,
-              childAspectRatio: 0.58  ,
+              childAspectRatio: 0.58,
             ),
-            itemCount: controller.products.length,
+            itemCount: controller.filteredProducts.length,
             itemBuilder: (context, index) {
-              final ProductModel product = controller.products[index];
+              final ProductModel product = controller.filteredProducts[index];
               return _buildProductCard(product);
             },
           ),
@@ -376,14 +509,14 @@ class HomePage extends StatelessWidget {
                       Expanded(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: kGold,
-                            foregroundColor: Colors.white,
+                            side: BorderSide(color: kBrown),
+                             foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                             padding: const EdgeInsets.symmetric(vertical: 6),
                             elevation: 0,
                           ),
                           onPressed: () => controller.addToCart(product.id),
-                          child: const Text('Add to cart', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                          child: const Text('Add to cart', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600,color: kBrown)),
                         ),
                       )
                     else ...[

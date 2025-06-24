@@ -301,8 +301,9 @@ class ProductDetailsPage extends StatelessWidget {
                                     Expanded(
                                       child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: kGold,
-                                          foregroundColor: Colors.white,
+                                          side: BorderSide(color: kBrown),
+                                          backgroundColor: Colors.white,
+                                          foregroundColor: kBrown,
                                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                           padding: const EdgeInsets.symmetric(vertical: 6),
                                           elevation: 0,
