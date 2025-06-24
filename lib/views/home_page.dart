@@ -4,6 +4,9 @@ import '../viewmodels/home_view_model.dart';
 import '../models/product_model.dart';
 import '../models/category_model.dart';
 
+const kGold = Color(0xFFC9A063);
+const kBrown = Color(0xFF5C4631);
+
 class HomePage extends StatelessWidget {
   final HomeViewModel controller = Get.put(HomeViewModel());
 
@@ -18,7 +21,9 @@ class HomePage extends StatelessWidget {
           children: [
             _buildHeroBanner(),
             _buildSearchBar(),
+            _sectionTitle('Quick action'),
             _buildQuickActions(),
+            _sectionTitle('new arrivals'),
             _buildNewArrivalsHeader(),
             _buildProductGrid(),
             const SizedBox(height: 16),
@@ -31,28 +36,28 @@ class HomePage extends StatelessWidget {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       backgroundColor: Colors.white,
-      elevation: 1,
+      elevation: 0.5,
       leading: IconButton(
-        icon: const Icon(Icons.menu, color: Colors.black87),
+        icon: const Icon(Icons.menu, color: kBrown, size: 22),
         onPressed: () {},
       ),
       title: const Text(
         'ZUNYA',
         style: TextStyle(
-          color: Colors.black87,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 4,
+          color: kBrown,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 6,
           fontSize: 22,
         ),
       ),
       centerTitle: true,
       actions: [
         IconButton(
-          icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black87),
+          icon: const Icon(Icons.shopping_cart_outlined, color: kBrown, size: 22),
           onPressed: () {},
         ),
         IconButton(
-          icon: const Icon(Icons.person_outline, color: Colors.black87),
+          icon: const Icon(Icons.person_outline, color: kBrown, size: 22),
           onPressed: () {},
         ),
       ],
@@ -64,7 +69,7 @@ class HomePage extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          height: 160,
+          height: 150,
           margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
@@ -79,13 +84,13 @@ class HomePage extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
-              color: Colors.black.withOpacity(0.25),
+              color: Colors.black.withOpacity(0.18),
             ),
           ),
         ),
         Positioned(
-          left: 32,
-          right: 32,
+          left: 0,
+          right: 0,
           top: 60,
           child: Column(
             children: [
@@ -94,23 +99,25 @@ class HomePage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
                   shadows: [Shadow(blurRadius: 4, color: Colors.black26)],
+                  letterSpacing: 1.2,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black87,
+                  backgroundColor: kGold,
+                  foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                  elevation: 0,
                 ),
                 onPressed: () {},
-                child: const Text('SHOP NOW', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: const Text('SHOP NOW', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1)),
               ),
             ],
           ),
@@ -125,31 +132,77 @@ class HomePage extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search or Scan your QR here',
-                prefixIcon: const Icon(Icons.search),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey[300]!),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey[300]!, width: 1),
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search Or Scan your QR here',
+                  hintStyle: TextStyle(color: Colors.grey[500], fontSize: 13),
+                  prefixIcon: const Icon(Icons.search, color: kBrown, size: 22),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
                 ),
-                filled: true,
-                fillColor: Colors.grey[100],
               ),
             ),
           ),
           const SizedBox(width: 8),
           Container(
             decoration: BoxDecoration(
-              color: Colors.black87,
+              color: kGold,
               borderRadius: BorderRadius.circular(12),
             ),
             child: IconButton(
-              icon: const Icon(Icons.tune, color: Colors.white),
+              icon: const Icon(Icons.tune, color: Colors.white, size: 20),
               onPressed: () {},
             ),
           ),
+        ],
+      ),
+    );
+  }
+  Widget _sectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          const SizedBox(width: 16),
+          // Left double lines
+          Column(
+            children: [
+              Container(width: 70, height: 2, color: Colors.amber),
+              const SizedBox(height: 4),
+              Container(width: 70, height: 2, color: Colors.amber),
+            ],
+          ),
+          const SizedBox(width: 12),
+          // Text
+          Expanded(
+            child: Center(
+              child: Text(
+                  title.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2,
+                  color: Colors.brown[800],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          // Right double lines
+          Column(
+            children: [
+              Container(width: 70, height: 2, color: Colors.amber),
+              const SizedBox(height: 4),
+              Container(width: 70, height: 2, color: Colors.amber),
+            ],
+          ),
+          const SizedBox(width: 16),
         ],
       ),
     );
@@ -159,31 +212,8 @@ class HomePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          child: Row(
-            children: [
-              const Text(
-                'QUICK ACTIONS',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  letterSpacing: 1.2,
-                  color: Colors.black87,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Container(
-                  height: 1,
-                  color: Colors.amber[200],
-                ),
-              ),
-            ],
-          ),
-        ),
         SizedBox(
-          height: 80,
+          height: 90,
           child: Obx(() => ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 scrollDirection: Axis.horizontal,
@@ -194,20 +224,21 @@ class HomePage extends StatelessWidget {
                   return Column(
                     children: [
                       Container(
-                        width: 48,
-                        height: 48,
+                        width: 58,
+                        height: 58,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
                             image: NetworkImage(cat.imageUrl),
                             fit: BoxFit.cover,
                           ),
+                          border: Border.all(color: kGold, width: 1),
                         ),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         cat.name,
-                        style: const TextStyle(fontSize: 12, color: Colors.black87),
+                        style: const TextStyle(fontSize: 12, color: kBrown, fontWeight: FontWeight.w600),
                       ),
                     ],
                   );
@@ -222,29 +253,11 @@ class HomePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'NEW ARRIVALS',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              letterSpacing: 1.2,
-              color: Colors.black87,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              height: 1,
-              color: Colors.amber[200],
-            ),
-          ),
-          const SizedBox(width: 8),
-          _buildFilterDropdown('FILTER'),
-          const SizedBox(width: 8),
-          _buildFilterDropdown('CATEGORY'),
-          const SizedBox(width: 8),
-          _buildFilterDropdown('SORT'),
+           _buildFilterDropdown('FILTER'),
+           _buildFilterDropdown('CATEGORY'),
+           _buildFilterDropdown('SORT'),
         ],
       ),
     );
@@ -254,14 +267,16 @@ class HomePage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]!),
-        borderRadius: BorderRadius.circular(8),
+         borderRadius: BorderRadius.circular(8),
         color: Colors.white,
       ),
       child: Row(
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: Colors.black87)),
-          const Icon(Icons.keyboard_arrow_down, size: 16),
+          Text(label, style: const TextStyle(
+            decoration: TextDecoration.underline ,
+            decorationColor: kBrown,
+            fontSize: 12, color: kBrown, fontWeight: FontWeight.w600,)),
+          const Icon(Icons.keyboard_arrow_down, size: 16, color: kBrown),
         ],
       ),
     );
@@ -277,7 +292,7 @@ class HomePage extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: 16,
               crossAxisSpacing: 12,
-              childAspectRatio: 0.72,
+              childAspectRatio: 0.63,
             ),
             itemCount: controller.products.length,
             itemBuilder: (context, index) {
@@ -291,7 +306,8 @@ class HomePage extends StatelessWidget {
   Widget _buildProductCard(ProductModel product) {
     final int qty = controller.getCartQuantity(product.id);
     return Card(
-      elevation: 3,
+      elevation: 1.5,
+      shadowColor: kGold.withOpacity(0.10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -304,25 +320,24 @@ class HomePage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
                     product.imageUrl,
-                    height: 90,
+                    height: 150,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
                 ),
-                if (product.isNew)
-                  Positioned(
-                    left: 0,
-                    top: 0,
+                   Positioned(
+                    left: 2,
+                    top: 2,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: Colors.green[100],
+                        color: Colors.white,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(12),
                           bottomRight: Radius.circular(12),
                         ),
                       ),
-                      child: const Text('NEW ARRIVAL', style: TextStyle(fontSize: 10, color: Colors.green)),
+                      child: const Text('100% cotton', style: TextStyle(fontSize: 10, color: Colors.green, fontWeight: FontWeight.bold)),
                     ),
                   ),
               ],
@@ -330,12 +345,12 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               product.name,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: kBrown),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             const SizedBox(height: 4),
-            Text('₹ ${product.price.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, color: Colors.black87)),
+            Text('₹ ${product.price.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, color: kBrown, fontWeight: FontWeight.w600)),
             const SizedBox(height: 4),
             Row(
               children: [
@@ -343,23 +358,24 @@ class HomePage extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black87,
+                        backgroundColor: kGold,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         padding: const EdgeInsets.symmetric(vertical: 6),
+                        elevation: 0,
                       ),
                       onPressed: () => controller.addToCart(product.id),
-                      child: const Text('Add to cart', style: TextStyle(fontSize: 12)),
+                      child: const Text('Add to cart', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                     ),
                   )
                 else ...[
                   IconButton(
-                    icon: const Icon(Icons.remove_circle_outline, size: 20),
+                    icon: const Icon(Icons.remove_circle_outline, size: 20, color: kGold),
                     onPressed: () => controller.removeFromCart(product.id),
                   ),
-                  Text('$qty', style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text('$qty', style: const TextStyle(fontWeight: FontWeight.bold, color: kBrown)),
                   IconButton(
-                    icon: const Icon(Icons.add_circle_outline, size: 20),
+                    icon: const Icon(Icons.add_circle_outline, size: 20, color: kGold),
                     onPressed: () => controller.addToCart(product.id),
                   ),
                 ],
