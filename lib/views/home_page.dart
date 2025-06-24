@@ -292,7 +292,7 @@ class HomePage extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: 16,
               crossAxisSpacing: 12,
-              childAspectRatio: 0.63,
+              childAspectRatio: 0.58  ,
             ),
             itemCount: controller.products.length,
             itemBuilder: (context, index) {
@@ -304,7 +304,6 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildProductCard(ProductModel product) {
-    final int qty = controller.getCartQuantity(product.id);
     return Card(
       elevation: 1.5,
       shadowColor: kGold.withOpacity(0.10),
@@ -325,62 +324,79 @@ class HomePage extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                   Positioned(
-                    left: 2,
-                    top: 2,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          bottomRight: Radius.circular(12),
-                        ),
+                Positioned(
+                  left: 2,
+                  top: 2,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
                       ),
-                      child: const Text('100% cotton', style: TextStyle(fontSize: 10, color: Colors.green, fontWeight: FontWeight.bold)),
                     ),
+                    child: const Text('100% cotton', style: TextStyle(fontSize: 10, color: Colors.green, fontWeight: FontWeight.bold)),
                   ),
+                ),
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-              product.name,
-              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: kBrown),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Row(
+              children: [
+                Text(
+                  product.name,
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: kBrown),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Spacer(),
+                Icon(Icons.lock,size: 17,color: kBrown,)
+              ],
             ),
+            const SizedBox(height: 4),
+
+            Text(
+              'Avalable Qty :${controller.getCartQuantity(product.id)}',
+              style: TextStyle(fontSize: 11,
+                fontWeight: FontWeight.w300, color: kBrown,),
+            ),
+
             const SizedBox(height: 4),
             Text('₹ ${product.price.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, color: kBrown, fontWeight: FontWeight.w600)),
             const SizedBox(height: 4),
-            Row(
-              children: [
-                if (qty == 0)
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: kGold,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        elevation: 0,
+            Obx(() {
+              final int qty = controller.getCartQuantity(product.id);
+              return Row(
+                children: [
+                  if (qty == 0)
+                    Expanded(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: kGold,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          elevation: 0,
+                        ),
+                        onPressed: () => controller.addToCart(product.id),
+                        child: const Text('Add to cart', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                       ),
-                      onPressed: () => controller.addToCart(product.id),
-                      child: const Text('Add to cart', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                    )
+                  else ...[
+                    IconButton(
+                      icon: const Icon(Icons.remove_circle_outline, size: 20, color: kGold),
+                      onPressed: () => controller.removeFromCart(product.id),
                     ),
-                  )
-                else ...[
-                  IconButton(
-                    icon: const Icon(Icons.remove_circle_outline, size: 20, color: kGold),
-                    onPressed: () => controller.removeFromCart(product.id),
-                  ),
-                  Text('$qty', style: const TextStyle(fontWeight: FontWeight.bold, color: kBrown)),
-                  IconButton(
-                    icon: const Icon(Icons.add_circle_outline, size: 20, color: kGold),
-                    onPressed: () => controller.addToCart(product.id),
-                  ),
+                    Text('$qty', style: const TextStyle(fontWeight: FontWeight.bold, color: kBrown)),
+                    IconButton(
+                      icon: const Icon(Icons.add_circle_outline, size: 20, color: kGold),
+                      onPressed: () => controller.addToCart(product.id),
+                    ),
+                  ],
                 ],
-              ],
-            ),
+              );
+            }),
           ],
         ),
       ),
