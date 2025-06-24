@@ -12,19 +12,19 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
-      body: Obx(() => SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-               // _buildHeroBanner(),
-               // _buildSearchBar(),
-               // _buildQuickActions(),
-              //  _buildNewArrivalsHeader(),
-              //  _buildProductGrid(),
-                const SizedBox(height: 16),
-              ],
-            ),
-          )),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeroBanner(),
+            _buildSearchBar(),
+            _buildQuickActions(),
+            _buildNewArrivalsHeader(),
+            _buildProductGrid(),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
     );
   }
 
