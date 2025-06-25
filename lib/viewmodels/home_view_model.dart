@@ -49,10 +49,10 @@ class HomeViewModel extends GetxController {
       CategoryModel(id: '4', name: 'All Seasons', imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca'),
     ];
     products.value = [
-      ProductModel(id: '001', name: 'IDSH - 0012', imageUrl: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f', price: 340, isNew: true),
-      ProductModel(id: '002', name: 'IDSH - 0013', imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb', price: 350, isNew: true),
-      ProductModel(id: '003', name: 'IDSH - 0014', imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca', price: 370),
-      ProductModel(id: '004', name: 'IDSH - 0015', imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca', price: 390),
+      ProductModel(id: '001', name: 'IDSH - 0012', imageUrl: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f', price: 340, isNew: true, availableQty: 1),
+      ProductModel(id: '002', name: 'IDSH - 0013', imageUrl: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb', price: 350, isNew: true, availableQty: 5),
+      ProductModel(id: '003', name: 'IDSH - 0014', imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca', price: 370, availableQty: 2),
+      ProductModel(id: '004', name: 'IDSH - 0015', imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca', price: 390, availableQty: 10),
     ];
   }
 

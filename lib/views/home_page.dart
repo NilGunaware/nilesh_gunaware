@@ -380,41 +380,128 @@ class HomePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Expanded(child: _buildFilterDropdown('CATEGORY')),
-          SizedBox(width: 8),
-          Expanded(child: _buildFilterDropdown('SORT')),
+          _buildFilterItem('FILTER'),
+          _buildFilterItem('CATEGORY'),
+          _buildFilterItem('SORT'),
         ],
       ),
     );
   }
 
-  Widget _buildFilterDropdown(String label) {
-    return Obx(() => DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            isExpanded: true,
-            value: label == 'SORT'
-                ? controller.sortOrder.value
-                : label == 'CATEGORY'
-                    ? (controller.selectedCategory.value.isEmpty ? 'All' : controller.selectedCategory.value)
-                    : null,
-            hint: Text(label, style: const TextStyle(fontSize: 12, color: kBrown, fontWeight: FontWeight.w600)),
-            items: label == 'SORT'
-                ? sortOptions.map((option) => DropdownMenuItem(value: option, child: Text(option, overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 12)))).toList()
-                : label == 'CATEGORY'
-                    ? [
-                        const DropdownMenuItem(value: 'All', child: Text('All', overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 12))),
-                        ...controller.categories.map((cat) => DropdownMenuItem(value: cat.name, child: Text(cat.name, overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 12)))).toList(),
-                      ]
-                    : null,
-            onChanged: (val) {
-              if (label == 'SORT' && val != null) controller.setSortOrder(val);
-              if (label == 'CATEGORY' && val != null) controller.setCategory(val == 'All' ? '' : val);
-            },
-            icon: const Icon(Icons.keyboard_arrow_down, size: 16, color: kBrown),
-            style: const TextStyle(fontSize: 12, color: kBrown, fontWeight: FontWeight.w600),
+  Widget _buildFilterItem(String label) {
+    final isSelected = label == 'SORT'
+        ? controller.sortOrder.value.isNotEmpty
+        : label == 'CATEGORY'
+            ? controller.selectedCategory.value.isNotEmpty
+            : false;
+
+    final selectedText = label == 'SORT'
+        ? controller.sortOrder.value
+        : label == 'CATEGORY'
+            ? controller.selectedCategory.value.isEmpty
+                ? 'All'
+                : controller.selectedCategory.value
+            : label;
+
+    return InkWell(
+      onTap: () {
+        if (label == 'SORT') {
+          _showSortSheet();
+        } else if (label == 'CATEGORY') {
+          _showCategorySheet();
+        }
+        // Add more logic for 'FILTER' if needed
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              Text(
+                selectedText.toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: kBrown,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Icon(Icons.keyboard_arrow_down, size: 16, color: kBrown),
+            ],
           ),
-        ));
+          if (isSelected)
+            Container(
+              margin: const EdgeInsets.only(top: 2),
+              height: 1.5,
+              width: 40,
+              color: kBrown,
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _showSortSheet() {
+    showModalBottomSheet(
+      context: Get.context!,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text('Default'),
+              onTap: () {
+                controller.setSortOrder('Default');
+                Get.back();
+              },
+            ),
+            ListTile(
+              title: Text('Price: Low to High'),
+              onTap: () {
+                controller.setSortOrder('Price: Low to High');
+                Get.back();
+              },
+            ),
+            ListTile(
+              title: Text('Price: High to Low'),
+              onTap: () {
+                controller.setSortOrder('Price: High to Low');
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showCategorySheet() {
+    showModalBottomSheet(
+      context: Get.context!,
+      builder: (context) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text('All'),
+              onTap: () {
+                controller.setCategory('');
+                Get.back();
+              },
+            ),
+            ...controller.categories.map((cat) => ListTile(
+                  title: Text(cat.name),
+                  onTap: () {
+                    controller.setCategory(cat.name);
+                    Get.back();
+                  },
+                )),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildProductGrid() {
@@ -492,13 +579,7 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 4),
-
-              Text(
-                'Avalable Qty :${controller.getCartQuantity(product.id)}',
-                style: TextStyle(fontSize: 11,
-                  fontWeight: FontWeight.w300, color: kBrown,),
-              ),
-
+              Text("Avalable Qty : ${product.availableQty ?? 0}"),
               const SizedBox(height: 4),
               Text('₹ ${product.price.toStringAsFixed(0)}', style: const TextStyle(fontSize: 13, color: kBrown, fontWeight: FontWeight.w600)),
               const SizedBox(height: 4),

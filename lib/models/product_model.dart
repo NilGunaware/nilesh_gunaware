@@ -3,6 +3,7 @@ class ProductModel {
   final String name;
   final String imageUrl;
   final double price;
+  final int availableQty;
   final bool isNew;
 
   ProductModel({
@@ -10,6 +11,7 @@ class ProductModel {
     required this.name,
     required this.imageUrl,
     required this.price,
+    required this.availableQty,
     this.isNew = false,
   });
 } 
