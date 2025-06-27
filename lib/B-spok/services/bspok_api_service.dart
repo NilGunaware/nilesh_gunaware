@@ -9,7 +9,7 @@ import '../models/bspok_order_model.dart';
 import '../models/bspok_banner_model.dart';
 
 class BSpokApiService {
-  static const String baseUrl = 'https://api.bspok.com'; // Replace with your actual API URL
+  static const String baseUrl = 'https://api.bspok.com';
   static const String apiVersion = '/api/v1';
   static const String tokenKey = 'bspok_auth_token';
   static const String userKey = 'bspok_user_data';

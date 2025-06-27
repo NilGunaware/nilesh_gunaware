@@ -3,6 +3,7 @@ import '../models/bspok_product_model.dart';
 import '../models/bspok_category_model.dart';
 import '../models/bspok_banner_model.dart';
 import '../services/bspok_api_service.dart';
+import 'package:flutter/material.dart';
 
 class BSpokHomeController extends GetxController {
   // Observable variables
@@ -341,5 +342,249 @@ class BSpokHomeController extends GetxController {
   // Navigate to orders
   void navigateToOrders() {
     Get.toNamed('/bspok/orders');
+  }
+
+  // Menu functionality
+  void openMenu() {
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home, color: Colors.red),
+              title: const Text('Home'),
+              onTap: () {
+                Get.back();
+                Get.offAllNamed('/bspok/home');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.category, color: Colors.red),
+              title: const Text('Categories'),
+              onTap: () {
+                Get.back();
+                showCategoryFilter();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.shopping_cart, color: Colors.red),
+              title: const Text('Cart'),
+              onTap: () {
+                Get.back();
+                navigateToCart();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person, color: Colors.red),
+              title: const Text('Profile'),
+              onTap: () {
+                Get.back();
+                navigateToProfile();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.receipt_long, color: Colors.red),
+              title: const Text('Orders'),
+              onTap: () {
+                Get.back();
+                navigateToOrders();
+              },
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Show filter options
+  void showFilterOptions() {
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Filter Options',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.category, color: Colors.red),
+              title: const Text('Filter by Category'),
+              onTap: () {
+                Get.back();
+                showCategoryFilter();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.sort, color: Colors.red),
+              title: const Text('Sort Products'),
+              onTap: () {
+                Get.back();
+                showSortOptions();
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.clear, color: Colors.red),
+              title: const Text('Clear Filters'),
+              onTap: () {
+                Get.back();
+                clearFilters();
+              },
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Show category filter
+  void showCategoryFilter() {
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Select Category',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(category.imageUrl),
+                    ),
+                    title: Text(category.name),
+                    subtitle: Text('${category.productCount} products'),
+                    onTap: () {
+                      Get.back();
+                      filterByCategory(category.id);
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Show sort options
+  void showSortOptions() {
+    Get.bottomSheet(
+      Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text(
+                'Sort Products',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.sort_by_alpha, color: Colors.red),
+              title: const Text('Name A-Z'),
+              onTap: () {
+                Get.back();
+                sortProducts('name', 'asc');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.sort_by_alpha, color: Colors.red),
+              title: const Text('Name Z-A'),
+              onTap: () {
+                Get.back();
+                sortProducts('name', 'desc');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.attach_money, color: Colors.red),
+              title: const Text('Price Low to High'),
+              onTap: () {
+                Get.back();
+                sortProducts('price', 'asc');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.attach_money, color: Colors.red),
+              title: const Text('Price High to Low'),
+              onTap: () {
+                Get.back();
+                sortProducts('price', 'desc');
+              },
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 } 

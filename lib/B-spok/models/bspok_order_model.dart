@@ -6,11 +6,11 @@ class BSpokOrder {
   final double tax;
   final double shipping;
   final double total;
-  final String status; // pending, confirmed, processing, shipped, delivered, cancelled
+  final String status;
   final String? trackingNumber;
   final String shippingAddress;
   final String paymentMethod;
-  final String paymentStatus; // pending, paid, failed, refunded
+  final String paymentStatus;
   final DateTime orderDate;
   final DateTime? deliveryDate;
 

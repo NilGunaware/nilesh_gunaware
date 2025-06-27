@@ -82,7 +82,7 @@ class BSpokHomePage extends StatelessWidget {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.menu, color: Colors.white),
-                              onPressed: () {},
+                              onPressed: () => controller.openMenu(),
                             ),
                             Text(
                               banner.title,
@@ -95,6 +95,10 @@ class BSpokHomePage extends StatelessWidget {
                             ),
                             Row(
                               children: [
+                                IconButton(
+                                  icon: const Icon(Icons.shopping_cart, color: Colors.white),
+                                  onPressed: () => controller.navigateToCart(),
+                                ),
                                 IconButton(
                                   icon: const Icon(Icons.notifications_none, color: Colors.white),
                                   onPressed: controller.navigateToProfile,
@@ -165,7 +169,7 @@ class BSpokHomePage extends StatelessWidget {
                               ),
                               child: IconButton(
                                 icon: const Icon(Icons.tune, color: Colors.white, size: 20),
-                                onPressed: () {},
+                                onPressed: () => controller.showFilterOptions(),
                               ),
                             ),
                           ],
@@ -227,17 +231,17 @@ class BSpokHomePage extends StatelessWidget {
           _FilterChip(
             label: 'FILTER', 
             icon: Icons.filter_list,
-            onTap: () {},
+            onTap: () => controller.showFilterOptions(),
           ),
           _FilterChip(
             label: 'CATEGORY', 
             icon: Icons.category,
-            onTap: () {},
+            onTap: () => controller.showCategoryFilter(),
           ),
           _FilterChip(
             label: 'SORT', 
             icon: Icons.sort,
-            onTap: () {},
+            onTap: () => controller.showSortOptions(),
           ),
         ],
       ),
@@ -417,6 +421,7 @@ class _ProductCard extends StatelessWidget {
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   const SizedBox(height: 2),
+
                   if (isPriceVisible)
                     Text(
                       '₹ ${product.price.toStringAsFixed(0)}',

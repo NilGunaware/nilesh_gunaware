@@ -155,6 +155,12 @@ class BSpokCartController extends GetxController {
   // Get cart item count
   int get itemCount => cartItems.fold(0, (sum, item) => sum + item.quantity);
 
+  // Get total items count
+  int get totalItems => cartItems.fold(0, (sum, item) => sum + item.quantity);
+
+  // Get total amount
+  double get totalAmount => total.value;
+
   // Check if cart is empty
   bool get isCartEmpty => cartItems.isEmpty;
 
