@@ -92,7 +92,12 @@ class HomePage extends StatelessWidget {
         }),
         Obx(() => Switch(
           value: controller.isSwitched.value,
-          onChanged: (val) => controller.isSwitched.value = val,
+          onChanged: (val) {
+            controller.isSwitched.value = val;
+            if (val) {
+              Get.toNamed('/bspok');
+            }
+          },
           activeColor: kGold,
         )),
       ],
@@ -514,7 +519,7 @@ class HomePage extends StatelessWidget {
               crossAxisCount: 2,
               mainAxisSpacing: 16,
               crossAxisSpacing: 12,
-              childAspectRatio: 0.58,
+              childAspectRatio: 0.53,
             ),
             itemCount: controller.filteredProducts.length,
             itemBuilder: (context, index) {

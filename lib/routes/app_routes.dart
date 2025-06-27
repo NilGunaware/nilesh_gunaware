@@ -3,12 +3,14 @@ import '../views/login_page.dart';
 import '../views/signup_page.dart';
 import '../views/home_page.dart';
 import '../views/forgot_password_page.dart';
+import '../B-spok/bspok_exports.dart';
 
 class Routes {
   static const LOGIN = '/login';
   static const SIGNUP = '/signup';
   static const HOME = '/home';
   static const FORGOT_PASSWORD = '/forgot-password';
+  static const BSPOK = '/bspok';
 }
 
 class AppRoutes {
@@ -17,5 +19,6 @@ class AppRoutes {
     GetPage(name: Routes.SIGNUP, page: () => SignupPage()),
     GetPage(name: Routes.HOME, page: () => HomePage()),
     GetPage(name: Routes.FORGOT_PASSWORD, page: () => ForgotPasswordPage()),
+    ...BSpokRoutes.routes,
   ];
 }
