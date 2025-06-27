@@ -29,21 +29,21 @@ class BSpokHomePage extends StatelessWidget {
                 // Banner Carousel
                 _buildBannerCarousel(homeController),
                 const SizedBox(height: 18),
-                
+
                 // Shop by Category Title
                 _SectionTitle(title: 'SHOP BY CATEGORY'),
 
                 // Shop by Category Cards
                 _buildCategorySection(homeController),
                 const SizedBox(height: 18),
-                
+
                 // New Arrivals Title
                 _SectionTitle(title: 'NEW ARRIVALS'),
                 const SizedBox(height: 18),
-                
+
                 // Filter/Category/Sort Chips
                 _buildFilterChips(homeController),
-                
+
                 // Product Grid
                 _buildProductGrid(homeController, cartController),
               ],
@@ -222,14 +222,18 @@ class BSpokHomePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("show price", style: TextStyle(color: Colors.white)),
+                            const  SizedBox(width: 20),
                             GetBuilder<BSpokHomeController>(
                               builder: (controller) => Switch(
                                 value: controller.isPriceVisible.value,
                                 onChanged: (val) => controller.togglePriceVisibility(),
                                 activeColor: Colors.red,
+                                activeTrackColor: Colors.white,
+                                 inactiveTrackColor: Colors.white,
+
                               ),
                             ),
-                            SizedBox(width: 50),
+                          const  SizedBox(width: 20),
                             Text("hide price", style: TextStyle(color: Colors.white))
                           ],
                         ),
@@ -501,7 +505,7 @@ class _ProductCard extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: Colors.red, width: 1),
+           side:    BorderSide(color: Colors.grey.withOpacity(0.1), width: 1),
         ),
         elevation: 0.5,
         child: Column(
