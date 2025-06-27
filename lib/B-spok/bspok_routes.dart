@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'pages/bspok_home_page.dart';
 import 'pages/bspok_login_page.dart';
 import 'pages/bspok_cart_page.dart';
+import 'pages/bspok_scanner_page.dart';
 import 'bspok_bindings.dart';
 
 class BSpokRoutes {
@@ -19,6 +20,10 @@ class BSpokRoutes {
     GetPage(
       name: '/bspok/cart',
       page: () => const BSpokCartPage(),
+    ),
+    GetPage(
+      name: '/bspok/scanner',
+      page: () => const BSpokScannerPage(),
     ),
   ];
 } 

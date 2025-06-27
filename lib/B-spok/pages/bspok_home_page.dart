@@ -275,8 +275,8 @@ class BSpokHomePage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: IconButton(
-                                icon: const Icon(Icons.tune, color: Colors.white, size: 20),
-                                onPressed: () => controller.showFilterOptions(),
+                                icon: const Icon(Icons.qr_code_scanner, color: Colors.white, size: 20),
+                                onPressed: () => controller.openScanner(),
                               ),
                             ),
                           ],

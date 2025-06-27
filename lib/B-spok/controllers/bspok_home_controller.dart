@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 class BSpokHomeController extends GetxController {
   // Observable variables
   final RxList<BSpokProduct> products = <BSpokProduct>[].obs;
+  final RxList<BSpokProduct> filteredProducts = <BSpokProduct>[].obs;
   final RxList<BSpokCategory> categories = <BSpokCategory>[].obs;
   final RxList<BSpokBanner> banners = <BSpokBanner>[].obs;
   final RxList<BSpokProduct> newArrivals = <BSpokProduct>[].obs;
@@ -221,6 +222,19 @@ class BSpokHomeController extends GetxController {
   // Update search query
   void updateSearchQuery(String query) {
     searchQuery.value = query;
+    filterProducts();
+  }
+
+  // Filter products based on search query
+  void filterProducts() {
+    if (searchQuery.value.isEmpty) {
+      filteredProducts.value = products;
+    } else {
+      filteredProducts.value = products.where((product) {
+        return product.name.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
+               product.description.toLowerCase().contains(searchQuery.value.toLowerCase());
+      }).toList();
+    }
   }
 
   // Search products
@@ -346,6 +360,11 @@ class BSpokHomeController extends GetxController {
     Get.toNamed('/bspok/orders');
   }
 
+  // Open camera scanner
+  void openScanner() {
+    Get.toNamed('/bspok/scanner');
+  }
+
   // Show filter options
   void showFilterOptions() {
     Get.bottomSheet(
@@ -372,6 +391,15 @@ class BSpokHomeController extends GetxController {
                 'Filter Options',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.qr_code_scanner, color: Colors.red),
+              title: const Text('Scan QR Code'),
+              subtitle: const Text('Scan product QR code'),
+              onTap: () {
+                Get.back();
+                openScanner();
+              },
             ),
             ListTile(
               leading: const Icon(Icons.category, color: Colors.red),
