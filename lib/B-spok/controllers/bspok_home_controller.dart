@@ -74,6 +74,28 @@ class BSpokHomeController extends GetxController {
           createdAt: DateTime.now(),
           updatedAt: DateTime.now(),
         ),
+        BSpokCategory(
+          id: '3',
+          name: 'WOOL',
+          description: 'High-quality wool fabrics',
+          imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca',
+          order: 2,
+          isActive: true,
+          productCount: 18,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
+        BSpokCategory(
+          id: '3',
+          name: 'WOOL',
+          description: 'High-quality wool fabrics',
+          imageUrl: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca',
+          order: 2,
+          isActive: true,
+          productCount: 18,
+          createdAt: DateTime.now(),
+          updatedAt: DateTime.now(),
+        ),
       ];
     } catch (e) {
       print('Error loading categories: $e');

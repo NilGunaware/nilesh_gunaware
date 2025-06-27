@@ -271,11 +271,11 @@ class BSpokHomePage extends StatelessWidget {
                               height: 45,
                               width: 45,
                               decoration: BoxDecoration(
-                                color: Colors.white24,
+                                // color: Colors.white24,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: IconButton(
-                                icon: const Icon(Icons.qr_code_scanner, color: Colors.white, size: 20),
+                                icon: const Icon(Icons.qr_code_scanner, color: Colors.white, size: 30),
                                 onPressed: () => controller.openScanner(),
                               ),
                             ),
@@ -318,7 +318,7 @@ class BSpokHomePage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: controller.categories.take(2).map((category) {
+        children: controller.categories.map((category) {
           return _CategoryCard(
             imageUrl: category.imageUrl,
             label: category.name,
@@ -475,7 +475,7 @@ class _CategoryCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(imageUrl, width: 90, height: 90, fit: BoxFit.cover),
+            child: Image.network(imageUrl, width: 100, height: 170, fit: BoxFit.cover),
           ),
           const SizedBox(height: 4),
           Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
