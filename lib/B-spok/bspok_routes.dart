@@ -7,7 +7,7 @@ import 'bspok_bindings.dart';
 class BSpokRoutes {
   static final routes = [
     GetPage(
-      name: '/bspok',
+      name: '/bspok/home',
       page: () => const BSpokHomePage(),
       binding: BSpokBindings(),
     ),

@@ -281,6 +281,8 @@ class BSpokHomeController extends GetxController {
   // Toggle price visibility
   void togglePriceVisibility() {
     isPriceVisible.value = !isPriceVisible.value;
+    // Force UI update
+    update();
   }
 
   // Clear filters
@@ -342,73 +344,6 @@ class BSpokHomeController extends GetxController {
   // Navigate to orders
   void navigateToOrders() {
     Get.toNamed('/bspok/orders');
-  }
-
-  // Menu functionality
-  void openMenu() {
-    Get.bottomSheet(
-      Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.home, color: Colors.red),
-              title: const Text('Home'),
-              onTap: () {
-                Get.back();
-                Get.offAllNamed('/bspok/home');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.category, color: Colors.red),
-              title: const Text('Categories'),
-              onTap: () {
-                Get.back();
-                showCategoryFilter();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.shopping_cart, color: Colors.red),
-              title: const Text('Cart'),
-              onTap: () {
-                Get.back();
-                navigateToCart();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.person, color: Colors.red),
-              title: const Text('Profile'),
-              onTap: () {
-                Get.back();
-                navigateToProfile();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.receipt_long, color: Colors.red),
-              title: const Text('Orders'),
-              onTap: () {
-                Get.back();
-                navigateToOrders();
-              },
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
   }
 
   // Show filter options

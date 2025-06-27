@@ -14,6 +14,7 @@ class BSpokHomePage extends StatelessWidget {
     final cartController = Get.find<BSpokCartController>();
 
     return Scaffold(
+      drawer: _buildDrawer(homeController),
       body: Obx(() {
         if (homeController.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -53,6 +54,104 @@ class BSpokHomePage extends StatelessWidget {
     );
   }
 
+  Widget _buildDrawer(BSpokHomeController controller) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: const BoxDecoration(
+              color: Colors.red,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, size: 35, color: Colors.red),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'B-SPOK',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Text(
+                  'Fashion E-commerce',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.home, color: Colors.red),
+            title: const Text('Home'),
+            onTap: () {
+              Get.back();
+              Get.offAllNamed('/bspok/home');
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.category, color: Colors.red),
+            title: const Text('Categories'),
+            onTap: () {
+              Get.back();
+              controller.showCategoryFilter();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shopping_cart, color: Colors.red),
+            title: const Text('Cart'),
+            onTap: () {
+              Get.back();
+              controller.navigateToCart();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.person, color: Colors.red),
+            title: const Text('Profile'),
+            onTap: () {
+              Get.back();
+              controller.navigateToProfile();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.receipt_long, color: Colors.red),
+            title: const Text('Orders'),
+            onTap: () {
+              Get.back();
+              controller.navigateToOrders();
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.settings, color: Colors.red),
+            title: const Text('Settings'),
+            onTap: () {
+              Get.back();
+              // Navigate to settings
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.help, color: Colors.red),
+            title: const Text('Help & Support'),
+            onTap: () {
+              Get.back();
+              // Navigate to help
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildBannerCarousel(BSpokHomeController controller) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0),
@@ -80,9 +179,11 @@ class BSpokHomePage extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            IconButton(
-                              icon: const Icon(Icons.menu, color: Colors.white),
-                              onPressed: () => controller.openMenu(),
+                            Builder(
+                              builder: (context) => IconButton(
+                                icon: const Icon(Icons.menu, color: Colors.white),
+                                onPressed: () => Scaffold.of(context).openDrawer(),
+                              ),
                             ),
                             Text(
                               banner.title,
@@ -121,11 +222,13 @@ class BSpokHomePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("show price", style: TextStyle(color: Colors.white)),
-                            Obx(() => Switch(
-                              value: controller.isPriceVisible.value,
-                              onChanged: (val) => controller.togglePriceVisibility(),
-                              activeColor: Colors.red,
-                            )),
+                            GetBuilder<BSpokHomeController>(
+                              builder: (controller) => Switch(
+                                value: controller.isPriceVisible.value,
+                                onChanged: (val) => controller.togglePriceVisibility(),
+                                activeColor: Colors.red,
+                              ),
+                            ),
                             SizedBox(width: 50),
                             Text("hide price", style: TextStyle(color: Colors.white))
                           ],
@@ -251,25 +354,27 @@ class BSpokHomePage extends StatelessWidget {
   Widget _buildProductGrid(BSpokHomeController homeController, BSpokCartController cartController) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.67,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
+      child: GetBuilder<BSpokHomeController>(
+        builder: (controller) => GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.67,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+          ),
+          itemCount: controller.newArrivals.length,
+          itemBuilder: (context, index) {
+            final product = controller.newArrivals[index];
+            return _ProductCard(
+              product: product,
+              onAddToCart: () => cartController.addToCart(product),
+              onTap: () => controller.navigateToProduct(product.id),
+              isPriceVisible: controller.isPriceVisible.value,
+            );
+          },
         ),
-        itemCount: homeController.newArrivals.length,
-        itemBuilder: (context, index) {
-          final product = homeController.newArrivals[index];
-          return _ProductCard(
-            product: product,
-            onAddToCart: () => cartController.addToCart(product),
-            onTap: () => homeController.navigateToProduct(product.id),
-            isPriceVisible: homeController.isPriceVisible.value,
-          );
-        },
       ),
     );
   }
